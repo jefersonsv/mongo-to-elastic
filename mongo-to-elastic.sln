@@ -5,7 +5,14 @@ VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{760A2FD1-8E25-4C8C-804B-0F949F5B3533}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mongo-to-elastic", "src\mongo-to-elastic\mongo-to-elastic.csproj", "{804EA1C7-2E03-4D61-96E8-2981ACFFF770}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mongo-to-elastic", "src\mongo-to-elastic\mongo-to-elastic.csproj", "{804EA1C7-2E03-4D61-96E8-2981ACFFF770}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EADFFB7F-DF5D-4CFB-B561-60C06D59AE0E}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
