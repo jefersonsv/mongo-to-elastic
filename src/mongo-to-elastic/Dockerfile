@@ -1,5 +1,4 @@
-﻿FROM microsoft/dotnet:2.0-runtime AS build
-#FROM microsoft/dotnet:2.0-sdk AS build-env
+﻿FROM microsoft/dotnet:2.0-sdk AS build-env
 
 RUN apt-get update && apt-get install -y \
   nano
@@ -16,8 +15,8 @@ RUN dotnet publish -c Release -o out
 
 # build runtime image
 # microsoft/dotnet:2.0-runtime # don't work
-FROM microsoft/dotnet:2.0-sdk
+FROM microsoft/dotnet:2.0-runtime
 WORKDIR /app
-COPY --from=build /app/out ./
+COPY --from=build-env /app/out ./
 
 ENTRYPOINT ["dotnet", "mongo-to-elastic.dll"]
