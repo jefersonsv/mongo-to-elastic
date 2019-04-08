@@ -11,10 +11,16 @@ namespace mongo_to_elastic
         private static void Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .WriteTo.ColoredConsole()
-                .WriteTo.RollingFile(Path.Combine("logs", "log-{Date}.log"))
+                .WriteTo.Console()
+                .WriteTo.File(Path.Combine("logs", @"\log.txt"), rollingInterval: RollingInterval.Day)
                 .CreateLogger();
+
+            //Environment.SetEnvironmentVariable("TYPE", "sqlserver-to-mongo");
+            //Environment.SetEnvironmentVariable("SQLSERVER", "Data Source=H73V220I;Initial Catalog=st1643_1; User Id=user_st1643_1;Password=pwd_st1643_1");
+
+            SqlServerToMongo.Start().Wait();
+            return;
+
 
             var crontab = NCrontab.CrontabSchedule.Parse("* * * * *");
 
@@ -24,13 +30,33 @@ namespace mongo_to_elastic
             {
                 if (schedule)
                 {
-                    JobManager.AddJob(() =>
-                    {
-                        Sync.Start().Wait();
-                        dateTime = crontab.GetNextOccurrence(DateTime.Now);
+                    var type = Environment.GetEnvironmentVariable("TYPE");
 
-                        schedule = true;
-                    }, (s) => s.ToRunOnceAt(dateTime));
+                    switch (type.ToLower().Trim())
+                    {
+                        case "monto-to-elastic":
+                            JobManager.AddJob(() =>
+                            {
+                                MongoToElastic.Start().Wait();
+                                dateTime = crontab.GetNextOccurrence(DateTime.Now);
+
+                                schedule = true;
+                            }, (s) => s.ToRunOnceAt(dateTime));
+                            break;
+
+                        case "sqlserver-to-mongo":
+                            JobManager.AddJob(() =>
+                            {
+                                SqlServerToMongo.Start().Wait();
+                                dateTime = crontab.GetNextOccurrence(DateTime.Now);
+
+                                schedule = true;
+                            }, (s) => s.ToRunOnceAt(dateTime));
+                            break;
+
+                        default:
+                            throw new Exception("Type not recognized");
+                    }
 
                     Log.Information($"Scheduled to: {dateTime}");
                     schedule = false;

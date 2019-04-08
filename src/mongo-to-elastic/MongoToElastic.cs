@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace mongo_to_elastic
 {
-    public static class Sync
+    public static class MongoToElastic
     {
         public static DateTime GetLastDateTimeSerie(string databaseName, string collectionName, string timelineField, ElasticLowLevelClient lowLevalClient)
         {
